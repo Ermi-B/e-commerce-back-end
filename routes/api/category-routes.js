@@ -47,12 +47,42 @@ router.post('/', async(req, res) => {
  }
 });
 
-router.put('/:id', (req, res) => {
-  // update a category by its `id` value
+router.put('/:id', async(req, res) => {
+  try{
+      // update a category by its `id` value
+
+  Category.update({
+    category_name:req.body.category
+  },
+  {
+    where:{
+      id:req.params.id
+    }
+  })
+  .then((rowsAffected)=>{
+    res.status(200).json({message:rowsAffected+" row(s) affected!"}) 
+  })
+
+  
+  
+  }catch(err){
+    res.status(500).json("failed to update the category",err)
+  }
 });
 
-router.delete('/:id', (req, res) => {
+router.delete('/:id', async(req, res) => {
   // delete a category by its `id` value
+  try{
+    Category.destroy({
+      where:{
+        id:req.params.id
+      }
+    }).then((rowsAffected)=>{
+      res.status(200).json({message:rowsAffected+" row(s) affected!"})
+    })
+  }catch(err){
+    res.status(500).json("failed to delete the category",err)
+  }
 });
 
 module.exports = router;
